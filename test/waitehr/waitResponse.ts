@@ -1,3 +1,6 @@
+import {
+  setTimeout as delay,
+} from 'node:timers/promises';
 import test from 'ava';
 import fastify from 'fastify';
 import * as sinon from 'sinon';
@@ -77,4 +80,26 @@ test('fails if timeout', async (t) => {
   t.false(await waitResponse(address, {
     timeout: 1_000,
   }));
+});
+
+test('delays first request', async (t) => {
+  const app = fastify();
+
+  const responseHandler = sinon.spy((request, reply) => {
+    void reply.send('OK');
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  const responsePromise = waitResponse(address, {
+    initialDelay: 200,
+  });
+
+  await delay(100);
+
+  t.false(responseHandler.called);
+
+  t.true(await responsePromise);
 });

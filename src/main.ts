@@ -33,6 +33,14 @@ const argv = yargs(hideBin(process.argv))
       description: 'Expected string(s). If multiple strings are provided, then all of them must be contained in the response.',
       type: 'array',
     },
+    'initial-delay': {
+      coerce: (value) => {
+        return value * 1_000;
+      },
+      default: 0,
+      description: 'How many seconds to delay the first request.',
+      type: 'number',
+    },
     interval: {
       coerce: (value) => {
         return value * 1_000;

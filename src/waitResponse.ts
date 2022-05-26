@@ -8,6 +8,7 @@ import got, {
 
 type ConfigurationInput = {
   contains?: string[],
+  initialDelay?: number,
   interval?: number,
   statusCodes?: number[],
   timeout?: number,
@@ -15,6 +16,7 @@ type ConfigurationInput = {
 
 type Configuration = {
   contains: string[],
+  initialDelay: number,
   interval: number,
   statusCodes: number[],
   timeout: number,
@@ -52,6 +54,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
   const configuration = {
     contains: [],
+    initialDelay: 0,
     interval: 1_000,
     statusCodes: [
       200,
@@ -63,7 +66,12 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
   const {
     timeout,
     interval,
+    initialDelay,
   } = configuration;
+
+  if (initialDelay) {
+    await delay(initialDelay);
+  }
 
   let currentRequest;
 
