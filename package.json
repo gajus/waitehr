@@ -62,7 +62,7 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src ./test && tsc --noEmit",
-    "test": "ROARR_LOG=1 NODE_ENV=test ava --serial --verbose"
+    "test": "ava --serial --verbose"
   },
   "version": "1.0.0"
 }
