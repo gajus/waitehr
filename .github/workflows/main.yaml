@@ -16,7 +16,7 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm run build
-      - run: semantic-release
+      - run: npx semantic-release
 name: Test, build and release
 on:
   push:
