@@ -16,15 +16,7 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm run build
-      - uses: paulhatch/semantic-version@v4.0.3
-        id: semantic_version
-        with:
-          tag_prefix: "v"
-          major_pattern: "BREAKING CHANGE"
-          minor_pattern: "feat:"
-          format: "${major}.${minor}.${patch}"
-          short_tags: false
-          bump_each_commit: false
+      - run: semantic-release
 name: Test, build and release
 on:
   push:
