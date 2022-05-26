@@ -28,7 +28,7 @@ const isExpectedResponse = (response: Response<string>, configuration: Configura
 
   for (const needle of contains) {
     if (!response.body.includes(needle)) {
-      console.warn(chalk.red('[failed check]') + ' status code is not among expected status codes (%s)', statusCodes.join(', '));
+      console.warn(chalk.red('[failed check]') + ' missing required snippet ("%s")', needle);
 
       return false;
     }
