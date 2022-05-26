@@ -6,8 +6,25 @@ import {
   waitResponse,
 } from './waitResponse';
 
+const usage = `$0 <url> [options]
+
+# Waits for response with status code 200.
+waitehr https://gajus.com/
+
+# Retries request at most once every 5 seconds (default: 1).
+waitehr https://gajus.com/ --interval 5
+
+# Waits at most 120 seconds (default: 60).
+waitehr https://gajus.com/ --timeout 60
+
+# Waits for response with status code 200 or 404.
+waitehr https://gajus.com/ --status-code 200 404
+
+# Waits for response that contains "foo" and "bar".
+waitehr https://gajus.com/ --contains "foo" "bar"`;
+
 const argv = yargs(hideBin(process.argv))
-  .usage('$0 <url> [options]')
+  .usage(usage)
   .options({
     contains: {
       description: 'Expected string(s). If multiple strings are provided, then all of them must be contained in the response.',
