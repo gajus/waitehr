@@ -5,6 +5,12 @@
 
 `waitehr` (wait [for] expected HTTP response) is a CLI program that waits for HTTP response and retries request until the expected response is received.
 
+## Install
+
+```bash
+npm install waitehr --global
+```
+
 ## Usage
 
 ```bash
