@@ -1,0 +1,37 @@
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    environment: release
+    name: Test
+    steps:
+      - name: setup repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: setup node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+          cache: "npm"
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+      - run: |-
+          git add -f action
+          git config user.email "gajus@gajus.com"
+          git config user.name "Gajus"
+          git commit -a -m 'chore: update ./action' && git push || true
+      - uses: paulhatch/semantic-version@v4.0.3
+        id: semantic_version
+        with:
+          tag_prefix: "v"
+          major_pattern: "BREAKING CHANGE"
+          minor_pattern: "feat:"
+          format: "${major}.${minor}.${patch}"
+          short_tags: false
+          bump_each_commit: false
+name: Test, build and release
+on:
+  push:
+    branches:
+      - main

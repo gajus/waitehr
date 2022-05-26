@@ -1,0 +1,25 @@
+{
+  "root": true,
+  "overrides": [
+    {
+      "files": "*.ts",
+      "extends": [
+        "canonical",
+        "canonical/node",
+        "canonical/typescript"
+      ],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        "no-console": 0
+      }
+    },
+    {
+      "files": "*.json",
+      "extends": [
+        "canonical/json"
+      ]
+    }
+  ]
+}
