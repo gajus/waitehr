@@ -29,3 +29,8 @@ waitehr https://gajus.com/ --status-code 200 404
 # Waits for response that contains "foo" and "bar".
 waitehr https://gajus.com/ --contains "foo" "bar"
 ```
+
+## Alternatives
+
+* [check_http](https://www.monitoring-plugins.org/doc/man/check_http.html) – Nagios plugin with equivalent functionality.
+* [httping](https://www.vanheusden.com/httping/) – utility for measuring latency and throughput of a webserver with limited some assertion capabilities.
