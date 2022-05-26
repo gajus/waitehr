@@ -57,7 +57,6 @@
   ],
   "license": "BSD-3-Clause",
   "name": "waitehr",
-  "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/gajus/waitehr"
