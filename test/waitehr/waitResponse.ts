@@ -172,3 +172,22 @@ test('follows at most maxRedirects', async (t) => {
     timeout: 100,
   }));
 });
+
+test('waits for expected response to hit the success threshold', async (t) => {
+  const app = fastify();
+
+  const responseHandler = sinon.spy((request, reply) => {
+    void reply.send('OK');
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.true(await waitResponse(address, {
+    interval: 50,
+    successThreshold: 10,
+  }));
+
+  t.is(responseHandler.callCount, 10);
+});

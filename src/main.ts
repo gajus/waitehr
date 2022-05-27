@@ -68,6 +68,11 @@ const argv = yargs(hideBin(process.argv))
       description: 'Expected status code(s). If multiple status codes are provided, then either will be accepted as valid.',
       type: 'array',
     },
+    'success-threshold': {
+      default: 1,
+      description: 'Minimum consecutive successes for the probe to be considered successful.',
+      type: 'number',
+    },
     timeout: {
       coerce: (value) => {
         return value * 1_000;

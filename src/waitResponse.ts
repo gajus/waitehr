@@ -13,6 +13,7 @@ type ConfigurationInput = {
   interval?: number,
   maxRedirects?: number,
   statusCodes?: number[],
+  successThreshold?: number,
   timeout?: number,
 };
 
@@ -23,6 +24,7 @@ type Configuration = {
   interval: number,
   maxRedirects: number,
   statusCodes: number[],
+  successThreshold: number,
   timeout: number,
 };
 
@@ -65,6 +67,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     statusCodes: [
       200,
     ],
+    successThreshold: 1,
     timeout: 60_000,
     ...configurationInput,
   };
@@ -74,6 +77,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     maxRedirects,
     timeout,
     interval,
+    successThreshold,
     initialDelay,
   } = configuration;
 
@@ -90,6 +94,8 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
       currentRequest.cancel();
     }
   }, timeout).unref();
+
+  let consecutiveSuccesses = 0;
 
   while (true) {
     const attemptStartTime = Date.now();
@@ -124,12 +130,20 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
       console.log(chalk.yellow('[received response]') + ' %d', response.statusCode);
 
       if (isExpectedResponse(response, configuration)) {
-        clearTimeout(timeoutId);
+        consecutiveSuccesses++;
 
-        console.log(chalk.green('received expected response'));
+        if (successThreshold === consecutiveSuccesses) {
+          clearTimeout(timeoutId);
 
-        return true;
+          console.log(chalk.green('received expected response'));
+
+          return true;
+        }
+      } else {
+        consecutiveSuccesses = 0;
       }
+    } else {
+      consecutiveSuccesses = 0;
     }
 
     const attemptEndTime = Date.now();

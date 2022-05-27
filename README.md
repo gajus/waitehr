@@ -51,6 +51,8 @@ Options:
   --status-codes   Expected status code(s). If multiple status codes are
                    provided, then either will be accepted as valid.
                                                         [array] [default: "200"]
+  --success-threshold  Minimum consecutive successes for the probe to be
+                       considered successful.              [number] [default: 1]
   --timeout        How many seconds to wait before giving up.      [default: 60]
 ```
 
