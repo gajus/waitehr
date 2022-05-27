@@ -12,6 +12,7 @@ type ConfigurationInput = {
   initialDelay?: number,
   interval?: number,
   maxRedirects?: number,
+  quiet?: boolean,
   statusCodes?: number[],
   successThreshold?: number,
   timeout?: number,
@@ -23,12 +24,13 @@ type Configuration = {
   initialDelay: number,
   interval: number,
   maxRedirects: number,
+  quiet: boolean,
   statusCodes: number[],
   successThreshold: number,
   timeout: number,
 };
 
-const isExpectedResponse = (response: Response<string>, configuration: Configuration): boolean => {
+const isExpectedResponse = (quiet: boolean, response: Response<string>, configuration: Configuration): boolean => {
   const {
     contains,
     statusCodes,
@@ -36,14 +38,18 @@ const isExpectedResponse = (response: Response<string>, configuration: Configura
 
   for (const needle of contains) {
     if (!response.body.includes(needle)) {
-      console.warn(chalk.red('[failed check]') + ' missing required snippet ("%s")', needle);
+      if (!quiet) {
+        console.warn(chalk.red('[failed check]') + ' missing required snippet ("%s")', needle);
+      }
 
       return false;
     }
   }
 
   if (!statusCodes.includes(response.statusCode)) {
-    console.warn(chalk.red('[failed check]') + ' status code is not among expected status codes (%s)', statusCodes.join(', '));
+    if (!quiet) {
+      console.warn(chalk.red('[failed check]') + ' status code is not among expected status codes (%s)', statusCodes.join(', '));
+    }
 
     return false;
   }
@@ -64,6 +70,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     initialDelay: 0,
     interval: 1_000,
     maxRedirects: 5,
+    quiet: true,
     statusCodes: [
       200,
     ],
@@ -77,12 +84,15 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     maxRedirects,
     timeout,
     interval,
+    quiet,
     successThreshold,
     initialDelay,
   } = configuration;
 
   if (successThreshold < 1) {
-    console.error('successThreshold must be greater than 0');
+    if (!quiet) {
+      console.error('successThreshold must be greater than 0');
+    }
 
     return false;
   }
@@ -107,7 +117,9 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     const attemptStartTime = Date.now();
 
     if (attemptStartTime - startTime > timeout) {
-      console.log(chalk.red('reached timeout'));
+      if (!quiet) {
+        console.log(chalk.red('reached timeout'));
+      }
 
       break;
     }
@@ -129,19 +141,25 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
         return false;
       }
 
-      console.log(chalk.red('[failed request]') + ' ' + error.message);
+      if (!quiet) {
+        console.log(chalk.red('[failed request]') + ' ' + error.message);
+      }
     }
 
     if (response) {
-      console.log(chalk.yellow('[received response]') + ' %d', response.statusCode);
+      if (!quiet) {
+        console.log(chalk.yellow('[received response]') + ' %d', response.statusCode);
+      }
 
-      if (isExpectedResponse(response, configuration)) {
+      if (isExpectedResponse(quiet, response, configuration)) {
         consecutiveSuccesses++;
 
         if (successThreshold === consecutiveSuccesses) {
           clearTimeout(timeoutId);
 
-          console.log(chalk.green('received expected response'));
+          if (!quiet) {
+            console.log(chalk.green('received expected response'));
+          }
 
           return true;
         }

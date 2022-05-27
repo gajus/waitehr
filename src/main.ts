@@ -58,6 +58,11 @@ const argv = yargs(hideBin(process.argv))
       description: 'If exceeded, the request will be aborted.',
       type: 'number',
     },
+    quiet: {
+      default: false,
+      description: 'Disables any output.',
+      type: 'boolean',
+    },
     'status-codes': {
       coerce: (values) => {
         return values.map((value) => {
