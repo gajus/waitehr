@@ -5,6 +5,10 @@
 
 `waitehr` (wait [for] expected HTTP response) is a CLI program that waits for HTTP response and retries request until the expected response is received.
 
+## Motivation
+
+We needed a reliable utility for checking when a deployment goes live in a CI/CD pipeline.
+
 ## Install
 
 ```bash
