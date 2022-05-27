@@ -81,6 +81,12 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     initialDelay,
   } = configuration;
 
+  if (successThreshold < 1) {
+    console.error('successThreshold must be greater than 0');
+
+    return false;
+  }
+
   if (initialDelay) {
     await delay(initialDelay);
   }
