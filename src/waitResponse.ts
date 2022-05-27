@@ -72,7 +72,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     initialDelay: 0,
     interval: 1_000,
     maxRedirects: 5,
-    quiet: true,
+    quiet: false,
     requestTimeout: 60_000,
     statusCodes: [
       200,
