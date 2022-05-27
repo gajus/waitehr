@@ -78,5 +78,5 @@ waitResponse(argv._[0] ?? '', argv)
     console.error(error);
 
     // eslint-disable-next-line node/no-process-exit
-    process.exit(0);
+    process.exit(1);
   });
