@@ -53,6 +53,11 @@ const argv = yargs(hideBin(process.argv))
       description: 'How many seconds to sleep between every attempt.',
       type: 'number',
     },
+    'max-redirects': {
+      default: 5,
+      description: 'If exceeded, the request will be aborted.',
+      type: 'number',
+    },
     'status-codes': {
       coerce: (values) => {
         return values.map((value) => {

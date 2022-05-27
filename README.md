@@ -42,6 +42,8 @@ Options:
                                                            [number] [default: 0]
   --interval       How many seconds to sleep between every attempt.
                                                            [number] [default: 1]
+  --max-redirects    If exceeded, the request will be aborted.
+                                                           [number] [default: 5]
   --status-codes   Expected status code(s). If multiple status codes are
                    provided, then either will be accepted as valid.
                                                         [array] [default: "200"]

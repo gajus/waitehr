@@ -148,3 +148,27 @@ test('follows redirects', async (t) => {
 
   t.true(responseHandler.called);
 });
+
+test('follows at most maxRedirects', async (t) => {
+  const app = fastify();
+
+  app.get('/', (request, reply) => {
+    void reply.redirect(303, '/bar');
+  });
+
+  app.get('/bar', (request, reply) => {
+    void reply.redirect(303, '/baz');
+  });
+
+  app.get('/baz', (request, reply) => {
+    void reply.send('OK');
+  });
+
+  const address = await app.listen(0);
+
+  t.false(await waitResponse(address, {
+    followRedirect: true,
+    maxRedirects: 1,
+    timeout: 100,
+  }));
+});

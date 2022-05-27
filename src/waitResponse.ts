@@ -11,6 +11,7 @@ type ConfigurationInput = {
   followRedirect?: boolean,
   initialDelay?: number,
   interval?: number,
+  maxRedirects?: number,
   statusCodes?: number[],
   timeout?: number,
 };
@@ -20,6 +21,7 @@ type Configuration = {
   followRedirect: boolean,
   initialDelay: number,
   interval: number,
+  maxRedirects: number,
   statusCodes: number[],
   timeout: number,
 };
@@ -59,6 +61,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     followRedirect: true,
     initialDelay: 0,
     interval: 1_000,
+    maxRedirects: 5,
     statusCodes: [
       200,
     ],
@@ -68,6 +71,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
   const {
     followRedirect,
+    maxRedirects,
     timeout,
     interval,
     initialDelay,
@@ -98,6 +102,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
     const request = got(url, {
       followRedirect,
+      maxRedirects,
       throwHttpErrors: false,
     });
 
