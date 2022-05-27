@@ -36,25 +36,26 @@ waitehr https://gajus.com/ --status-code 200 404
 waitehr https://gajus.com/ --contains "foo" "bar"
 
 Options:
-  --help           Show help                                           [boolean]
-  --version        Show version number                                 [boolean]
-  --contains       Expected string(s). If multiple strings are provided, then
-                   all of them must be contained in the response.        [array]
-  --follow-redirect  Defines if redirect responses should be followed
-                     automatically.                                    [boolean]
-  --initial-delay  How many seconds to delay the first request.
+  --help               Show help                                       [boolean]
+  --version            Show version number                             [boolean]
+  --contains           Expected string(s). If multiple strings are provided,
+                       then all of them must be contained in the response.
+                                                                         [array]
+  --follow-redirect    Defines if redirect responses should be followed
+                       automatically.                                  [boolean]
+  --initial-delay      How many seconds to delay the first request.
                                                            [number] [default: 0]
-  --interval       How many seconds to sleep between every attempt.
+  --interval           How many seconds to sleep between every attempt.
                                                            [number] [default: 1]
-  --max-redirects    If exceeded, the request will be aborted.
+  --max-redirects      If exceeded, the request will be aborted.
                                                            [number] [default: 5]
   --quiet              Disables any output.           [boolean] [default: false]
-  --status-codes   Expected status code(s). If multiple status codes are
-                   provided, then either will be accepted as valid.
+  --status-codes       Expected status code(s). If multiple status codes are
+                       provided, then either will be accepted as valid.
                                                         [array] [default: "200"]
   --success-threshold  Minimum consecutive successes for the probe to be
                        considered successful.              [number] [default: 1]
-  --timeout        How many seconds to wait before giving up.      [default: 60]
+  --timeout            How many seconds to wait before giving up.  [default: 60]
 ```
 
 ## Alternatives
