@@ -126,3 +126,25 @@ test('does not follow redirect', async (t) => {
 
   t.false(responseHandler.called);
 });
+
+test('follows redirects', async (t) => {
+  const app = fastify();
+
+  app.get('/', (request, reply) => {
+    void reply.redirect(303, '/bar');
+  });
+
+  const responseHandler = sinon.spy((request, reply) => {
+    void reply.send('OK');
+  });
+
+  app.get('/bar', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.true(await waitResponse(address, {
+    followRedirect: true,
+  }));
+
+  t.true(responseHandler.called);
+});
