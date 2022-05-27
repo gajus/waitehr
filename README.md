@@ -50,6 +50,9 @@ Options:
   --max-redirects      If exceeded, the request will be aborted.
                                                            [number] [default: 5]
   --quiet              Disables any output.           [boolean] [default: false]
+  --request-timeout    How many seconds to wait for individual requests to
+                       complete. If exceeded, requests are aborted and a new
+                       request is started.                 [number] [default: 5]
   --status-codes       Expected status code(s). If multiple status codes are
                        provided, then either will be accepted as valid.
                                                         [array] [default: "200"]

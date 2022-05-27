@@ -63,6 +63,14 @@ const argv = yargs(hideBin(process.argv))
       description: 'Disables any output.',
       type: 'boolean',
     },
+    'request-timeout': {
+      coerce: (value) => {
+        return value * 1_000;
+      },
+      default: 5,
+      description: 'How many seconds to wait for individual requests to complete. If exceeded, requests are aborted and a new request is started.',
+      type: 'number',
+    },
     'status-codes': {
       coerce: (values) => {
         return values.map((value) => {

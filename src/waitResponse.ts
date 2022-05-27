@@ -13,6 +13,7 @@ type ConfigurationInput = {
   interval?: number,
   maxRedirects?: number,
   quiet?: boolean,
+  requestTimeout?: number,
   statusCodes?: number[],
   successThreshold?: number,
   timeout?: number,
@@ -25,6 +26,7 @@ type Configuration = {
   interval: number,
   maxRedirects: number,
   quiet: boolean,
+  requestTimeout: number,
   statusCodes: number[],
   successThreshold: number,
   timeout: number,
@@ -71,6 +73,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     interval: 1_000,
     maxRedirects: 5,
     quiet: true,
+    requestTimeout: 60_000,
     statusCodes: [
       200,
     ],
@@ -87,6 +90,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     quiet,
     successThreshold,
     initialDelay,
+    requestTimeout,
   } = configuration;
 
   if (successThreshold < 1) {
@@ -130,18 +134,32 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
       throwHttpErrors: false,
     });
 
+    // got `timeout` setting is unreliable – it takes
+    // a lot longer than whatever the timeout value.
+    const requestTimeoutId = setTimeout(() => {
+      if (!quiet) {
+        console.log(chalk.red('[failed request]') + ' request timeout');
+      }
+
+      request.cancel();
+    }, requestTimeout).unref();
+
     currentRequest = request;
 
     let response;
 
     try {
       response = await request;
-    } catch (error) {
-      if (currentRequest.isCanceled) {
-        return false;
-      }
 
-      if (!quiet) {
+      clearTimeout(requestTimeoutId);
+    } catch (error) {
+      clearTimeout(requestTimeoutId);
+
+      if (currentRequest.isCanceled) {
+        if (attemptStartTime - startTime > timeout) {
+          return false;
+        }
+      } else if (!quiet) {
         console.log(chalk.red('[failed request]') + ' ' + error.message);
       }
     }

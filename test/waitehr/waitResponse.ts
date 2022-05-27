@@ -191,3 +191,25 @@ test('waits for expected response to hit the success threshold', async (t) => {
 
   t.is(responseHandler.callCount, 10);
 });
+
+test('waits at most requestTimeout', async (t) => {
+  const app = fastify();
+
+  const responseHandler = sinon.spy((request, reply) => {
+    setTimeout(() => {
+      reply.send('OK');
+    }, 200);
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.false(await waitResponse(address, {
+    interval: 50,
+    requestTimeout: 100,
+    timeout: 500,
+  }));
+
+  t.is(responseHandler.callCount, 5);
+});
