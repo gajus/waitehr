@@ -103,3 +103,26 @@ test('delays first request', async (t) => {
 
   t.true(await responsePromise);
 });
+
+test('does not follow redirect', async (t) => {
+  const app = fastify();
+
+  app.get('/', (request, reply) => {
+    void reply.redirect(303, '/bar');
+  });
+
+  const responseHandler = sinon.spy((request, reply) => {
+    void reply.send('OK');
+  });
+
+  app.get('/bar', responseHandler);
+
+  const address = await app.listen(0);
+
+  await waitResponse(address, {
+    followRedirect: false,
+    timeout: 100,
+  });
+
+  t.false(responseHandler.called);
+});

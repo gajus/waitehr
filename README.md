@@ -36,6 +36,8 @@ Options:
   --version        Show version number                                 [boolean]
   --contains       Expected string(s). If multiple strings are provided, then
                    all of them must be contained in the response.        [array]
+  --follow-redirect  Defines if redirect responses should be followed
+                     automatically.                                    [boolean]
   --initial-delay  How many seconds to delay the first request.
                                                            [number] [default: 0]
   --interval       How many seconds to sleep between every attempt.

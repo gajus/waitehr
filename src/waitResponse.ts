@@ -8,6 +8,7 @@ import got, {
 
 type ConfigurationInput = {
   contains?: string[],
+  followRedirect?: boolean,
   initialDelay?: number,
   interval?: number,
   statusCodes?: number[],
@@ -16,6 +17,7 @@ type ConfigurationInput = {
 
 type Configuration = {
   contains: string[],
+  followRedirect: boolean,
   initialDelay: number,
   interval: number,
   statusCodes: number[],
@@ -54,6 +56,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
   const configuration = {
     contains: [],
+    followRedirect: true,
     initialDelay: 0,
     interval: 1_000,
     statusCodes: [
@@ -64,6 +67,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
   };
 
   const {
+    followRedirect,
     timeout,
     interval,
     initialDelay,
@@ -93,6 +97,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     }
 
     const request = got(url, {
+      followRedirect,
       throwHttpErrors: false,
     });
 

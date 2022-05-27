@@ -33,6 +33,10 @@ const argv = yargs(hideBin(process.argv))
       description: 'Expected string(s). If multiple strings are provided, then all of them must be contained in the response.',
       type: 'array',
     },
+    'follow-redirect': {
+      description: 'Defines if redirect responses should be followed automatically.',
+      type: 'boolean',
+    },
     'initial-delay': {
       coerce: (value) => {
         return value * 1_000;
