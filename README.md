@@ -9,6 +9,26 @@
 
 We needed a reliable utility for checking when a deployment goes live in a CI/CD pipeline.
 
+### Why not just use Bash/curl/...?
+
+> You should be able to do this with curl and a simple bash script.
+
+You could achieve something similar to this with bash:
+
+```bash
+while curl https://gajus.com/ | grep -q Gajus; do sleep 1; done
+```
+
+However, by the time you add:
+
+* routine timeout
+* request timeout
+* follow redirects
+* max redirects
+* success threshold
+
+It is going to be a pretty hefty script, and if everyone (with their varying experience of using Bash) were to write that script adhoc, it is likely to be error prone. It is for this reason that it makes sense to use a well tested utility that does it well.
+
 ## Install
 
 ```bash
