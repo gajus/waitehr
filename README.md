@@ -35,6 +35,13 @@ It is going to be a pretty hefty script, and if everyone (with their varying exp
 npm install waitehr --global
 ```
 
+## Run with Docker
+
+```bash
+docker build . -t waitehr:latest
+docker run waitehr:latest --help
+```
+
 ## Usage
 
 ```bash
