@@ -28,6 +28,9 @@ waitehr https://gajus.com/ --contains "foo" "bar"`;
 
 const argv = yargs(hideBin(process.argv))
   .usage(usage)
+  .parserConfiguration({
+    'parse-numbers': false,
+  })
   .options({
     contains: {
       description: 'Expected string(s). If multiple strings are provided, then all of them must be contained in the response.',
