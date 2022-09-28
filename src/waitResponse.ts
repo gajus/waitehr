@@ -9,6 +9,7 @@ import got, {
 type ConfigurationInput = {
   contains?: string[],
   followRedirect?: boolean,
+  headers?: string[],
   initialDelay?: number,
   interval?: number,
   maxRedirects?: number,
@@ -22,6 +23,7 @@ type ConfigurationInput = {
 type Configuration = {
   contains: string[],
   followRedirect: boolean,
+  headers: string[],
   initialDelay: number,
   interval: number,
   maxRedirects: number,
@@ -32,7 +34,26 @@ type Configuration = {
   timeout: number,
 };
 
-const isExpectedResponse = (quiet: boolean, response: Response<string>, configuration: Configuration): boolean => {
+export const buildHeadersObject = (headers: string[]): Record<string, string> => {
+  const headersObject = {};
+
+  for (const header of headers) {
+    const [
+      name,
+      value,
+    ] = header.split(':');
+
+    headersObject[name] = value.trim();
+  }
+
+  return headersObject;
+};
+
+const isExpectedResponse = (
+  quiet: boolean,
+  response: Response<string>,
+  configuration: Configuration,
+): boolean => {
   const {
     contains,
     statusCodes,
@@ -41,7 +62,10 @@ const isExpectedResponse = (quiet: boolean, response: Response<string>, configur
   for (const needle of contains) {
     if (!response.body.includes(needle)) {
       if (!quiet) {
-        console.warn(chalk.red('[failed check]') + ' missing required snippet ("%s")', needle);
+        console.warn(
+          chalk.red('[failed check]') + ' missing required snippet ("%s")',
+          needle,
+        );
       }
 
       return false;
@@ -50,7 +74,11 @@ const isExpectedResponse = (quiet: boolean, response: Response<string>, configur
 
   if (!statusCodes.includes(response.statusCode)) {
     if (!quiet) {
-      console.warn(chalk.red('[failed check]') + ' status code is not among expected status codes (%s)', statusCodes.join(', '));
+      console.warn(
+        chalk.red('[failed check]') +
+          ' status code is not among expected status codes (%s)',
+        statusCodes.join(', '),
+      );
     }
 
     return false;
@@ -59,7 +87,10 @@ const isExpectedResponse = (quiet: boolean, response: Response<string>, configur
   return true;
 };
 
-export const waitResponse = async (url: string, configurationInput: ConfigurationInput): Promise<boolean> => {
+export const waitResponse = async (
+  url: string,
+  configurationInput: ConfigurationInput,
+): Promise<boolean> => {
   if (!url) {
     console.error('URL must not be empty');
 
@@ -69,6 +100,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
   const configuration = {
     contains: [],
     followRedirect: true,
+    headers: [],
     initialDelay: 0,
     interval: 1_000,
     maxRedirects: 5,
@@ -86,6 +118,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
     followRedirect,
     maxRedirects,
     timeout,
+    headers,
     interval,
     quiet,
     successThreshold,
@@ -130,6 +163,7 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
     const request = got(url, {
       followRedirect,
+      headers: buildHeadersObject(headers),
       maxRedirects,
       throwHttpErrors: false,
     });
@@ -166,7 +200,10 @@ export const waitResponse = async (url: string, configurationInput: Configuratio
 
     if (response) {
       if (!quiet) {
-        console.log(chalk.yellow('[received response]') + ' %d', response.statusCode);
+        console.log(
+          chalk.yellow('[received response]') + ' %d',
+          response.statusCode,
+        );
       }
 
       if (isExpectedResponse(quiet, response, configuration)) {
