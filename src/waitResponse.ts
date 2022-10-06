@@ -92,7 +92,16 @@ export const waitResponse = async (
   configurationInput: ConfigurationInput,
 ): Promise<boolean> => {
   if (!url) {
-    console.error('URL must not be empty');
+    console.error(chalk.red('[configuration error]') + ' URL must not be empty');
+
+    return false;
+  }
+
+  try {
+    // eslint-disable-next-line no-new
+    new URL(url);
+  } catch {
+    console.error(chalk.red('[configuration error]') + ' invalid URL "%s"', url);
 
     return false;
   }
