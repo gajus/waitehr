@@ -62,6 +62,9 @@ waitehr https://gajus.com/ --status-code 200 404
 # Waits for response that contains "foo" and "bar".
 waitehr https://gajus.com/ --contains "foo" "bar"
 
+# Sends headers with the request if required to receive a valid response
+waitehr https://gajus.com/ --headers "Accepts: text/html" "Authorization: Bearer fkd9afsda9k"
+
 Options:
   --help               Show help                                       [boolean]
   --version            Show version number                             [boolean]
@@ -86,6 +89,9 @@ Options:
   --success-threshold  Minimum consecutive successes for the probe to be
                        considered successful.              [number] [default: 1]
   --timeout            How many seconds to wait before giving up.  [default: 60]
+  --headers            String request headers in the format
+                       <Header Key>: <Header Value>.
+                                                                   [array]
 ```
 
 ## Alternatives

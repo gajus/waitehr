@@ -28,6 +28,9 @@ waitehr https://gajus.com/ --contains "foo" "bar"`;
 
 const argv = yargs(hideBin(process.argv))
   .usage(usage)
+  .parserConfiguration({
+    'parse-numbers': false,
+  })
   .options({
     contains: {
       description: 'Expected string(s). If multiple strings are provided, then all of them must be contained in the response.',
@@ -36,6 +39,10 @@ const argv = yargs(hideBin(process.argv))
     'follow-redirect': {
       description: 'Defines if redirect responses should be followed automatically.',
       type: 'boolean',
+    },
+    headers: {
+      description: 'String request headers in the format <Header Key>: <Header Value>.',
+      type: 'array',
     },
     'initial-delay': {
       coerce: (value) => {

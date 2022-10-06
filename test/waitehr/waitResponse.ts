@@ -213,3 +213,23 @@ test('waits at most requestTimeout', async (t) => {
 
   t.is(responseHandler.callCount, 5);
 });
+
+test('includes headers in request', async (t) => {
+  const app = fastify();
+
+  const responseHandler = sinon.spy((request, reply) => {
+    t.is(request.headers['x-foo'], 'bar');
+
+    void reply.send('OK');
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.true(await waitResponse(address, {
+    headers: [
+      'x-foo: bar',
+    ],
+  }));
+});
