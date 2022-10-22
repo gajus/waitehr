@@ -65,6 +65,11 @@ const argv = yargs(hideBin(process.argv))
       description: 'If exceeded, the request will be aborted.',
       type: 'number',
     },
+    'prepend-time': {
+      default: true,
+      description: 'Prepends time to each check output.',
+      type: 'boolean',
+    },
     quiet: {
       default: false,
       description: 'Disables any output.',

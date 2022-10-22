@@ -13,6 +13,7 @@ type ConfigurationInput = {
   initialDelay?: number,
   interval?: number,
   maxRedirects?: number,
+  prependTime?: boolean,
   quiet?: boolean,
   requestTimeout?: number,
   statusCodes?: number[],
@@ -27,11 +28,20 @@ type Configuration = {
   initialDelay: number,
   interval: number,
   maxRedirects: number,
+  prependTime: boolean,
   quiet: boolean,
   requestTimeout: number,
   statusCodes: number[],
   successThreshold: number,
   timeout: number,
+};
+
+const conditionallyPrependTime = (subject: string, prependTime: boolean): string => {
+  if (prependTime) {
+    return `[${new Date().toISOString()}] ${subject}`;
+  }
+
+  return subject;
 };
 
 export const buildHeadersObject = (headers: string[]): Record<string, string> => {
@@ -113,6 +123,7 @@ export const waitResponse = async (
     initialDelay: 0,
     interval: 1_000,
     maxRedirects: 5,
+    prependTime: true,
     quiet: false,
     requestTimeout: 60_000,
     statusCodes: [
@@ -164,7 +175,7 @@ export const waitResponse = async (
 
     if (attemptStartTime - startTime > timeout) {
       if (!quiet) {
-        console.log(chalk.red('reached timeout'));
+        console.log(conditionallyPrependTime(chalk.red('reached timeout'), configuration.prependTime));
       }
 
       break;
@@ -181,7 +192,7 @@ export const waitResponse = async (
     // a lot longer than whatever the timeout value.
     const requestTimeoutId = setTimeout(() => {
       if (!quiet) {
-        console.log(chalk.red('[failed request]') + ' request timeout');
+        console.log(conditionallyPrependTime(chalk.red('[failed request]') + ' request timeout', configuration.prependTime));
       }
 
       request.cancel();
@@ -203,14 +214,14 @@ export const waitResponse = async (
           return false;
         }
       } else if (!quiet) {
-        console.log(chalk.red('[failed request]') + ' ' + error.message);
+        console.log(conditionallyPrependTime(chalk.red('[failed request]') + ' ' + error.message, configuration.prependTime));
       }
     }
 
     if (response) {
       if (!quiet) {
         console.log(
-          chalk.yellow('[received response]') + ' %d',
+          conditionallyPrependTime(chalk.yellow('[received response]') + ' %d', configuration.prependTime),
           response.statusCode,
         );
       }
