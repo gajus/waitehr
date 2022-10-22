@@ -73,7 +73,7 @@ const isExpectedResponse = (
     if (!response.body.includes(needle)) {
       if (!quiet) {
         console.warn(
-          chalk.red('[failed check]') + ' missing required snippet ("%s")',
+          conditionallyPrependTime(chalk.red('[failed check]') + ' missing required snippet ("%s")', configuration.prependTime),
           needle,
         );
       }
@@ -85,8 +85,8 @@ const isExpectedResponse = (
   if (!statusCodes.includes(response.statusCode)) {
     if (!quiet) {
       console.warn(
-        chalk.red('[failed check]') +
-          ' status code is not among expected status codes (%s)',
+        conditionallyPrependTime(chalk.red('[failed check]') +
+          ' status code is not among expected status codes (%s)', configuration.prependTime),
         statusCodes.join(', '),
       );
     }
