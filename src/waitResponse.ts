@@ -45,7 +45,9 @@ const conditionallyPrependTime = (subject: string, prependTime: boolean): string
 };
 
 export const buildHeadersObject = (headers: string[]): Record<string, string> => {
-  const headersObject = {};
+  const headersObject = {
+    'user-agent': 'waitehr',
+  };
 
   for (const header of headers) {
     const [

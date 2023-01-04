@@ -233,3 +233,19 @@ test('includes headers in request', async (t) => {
     ],
   }));
 });
+
+test('sends waitehr user-agent header', async (t) => {
+  const app = fastify();
+
+  const responseHandler = sinon.spy((request, reply) => {
+    t.is(request.headers['user-agent'], 'waitehr');
+
+    void reply.send('OK');
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.true(await waitResponse(address, {}));
+});
