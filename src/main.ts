@@ -40,8 +40,8 @@ const argv = yargs(hideBin(process.argv))
       description: 'Defines if redirect responses should be followed automatically.',
       type: 'boolean',
     },
-    headers: {
-      description: 'String request headers in the format <Header Key>: <Header Value>.',
+    header: {
+      description: 'Extra header to include in the request when sending HTTP to a server. <Header Key>: <Header Value>.',
       type: 'array',
     },
     'initial-delay': {

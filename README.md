@@ -56,7 +56,7 @@ waitehr https://gajus.com/ --status-code 200 404
 waitehr https://gajus.com/ --contains "foo" "bar"
 
 # Sends headers with the request if required to receive a valid response
-waitehr https://gajus.com/ --headers "Accepts: text/html" "Authorization: Bearer fkd9afsda9k"
+waitehr https://gajus.com/ --header "Accepts: text/html" "Authorization: Bearer fkd9afsda9k"
 
 Options:
   --help               Show help                                       [boolean]
@@ -66,12 +66,16 @@ Options:
                                                                          [array]
   --follow-redirect    Defines if redirect responses should be followed
                        automatically.                                  [boolean]
+  --header             Extra header to include in the request when sending HTTP
+                       to a server. <Header Key>: <Header Value>.        [array]
   --initial-delay      How many seconds to delay the first request.
                                                            [number] [default: 0]
   --interval           How many seconds to sleep between every attempt.
                                                            [number] [default: 1]
   --max-redirects      If exceeded, the request will be aborted.
                                                            [number] [default: 5]
+  --prepend-time       Prepends time to each check output.
+                                                       [boolean] [default: true]
   --quiet              Disables any output.           [boolean] [default: false]
   --request-timeout    How many seconds to wait for individual requests to
                        complete. If exceeded, requests are aborted and a new
@@ -82,9 +86,6 @@ Options:
   --success-threshold  Minimum consecutive successes for the probe to be
                        considered successful.              [number] [default: 1]
   --timeout            How many seconds to wait before giving up.  [default: 60]
-  --headers            String request headers in the format
-                       <Header Key>: <Header Value>.
-                                                                   [array]
 ```
 
 ## Alternatives

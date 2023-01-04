@@ -9,7 +9,7 @@ import got, {
 type ConfigurationInput = {
   contains?: string[],
   followRedirect?: boolean,
-  headers?: string[],
+  header?: string[],
   initialDelay?: number,
   interval?: number,
   maxRedirects?: number,
@@ -24,7 +24,7 @@ type ConfigurationInput = {
 type Configuration = {
   contains: string[],
   followRedirect: boolean,
-  headers: string[],
+  header: string[],
   initialDelay: number,
   interval: number,
   maxRedirects: number,
@@ -121,7 +121,7 @@ export const waitResponse = async (
   const configuration = {
     contains: [],
     followRedirect: true,
-    headers: [],
+    header: [],
     initialDelay: 0,
     interval: 1_000,
     maxRedirects: 5,
@@ -140,7 +140,7 @@ export const waitResponse = async (
     followRedirect,
     maxRedirects,
     timeout,
-    headers,
+    header,
     interval,
     quiet,
     successThreshold,
@@ -185,7 +185,7 @@ export const waitResponse = async (
 
     const request = got(url, {
       followRedirect,
-      headers: buildHeadersObject(headers),
+      headers: buildHeadersObject(header),
       maxRedirects,
       throwHttpErrors: false,
     });
