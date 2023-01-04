@@ -24,7 +24,14 @@ waitehr https://gajus.com/ --timeout 60
 waitehr https://gajus.com/ --status-code 200 404
 
 # Waits for response that contains "foo" and "bar".
-waitehr https://gajus.com/ --contains "foo" "bar"`;
+waitehr https://gajus.com/ --contains "foo" "bar"
+
+# Waits for response that has a specific header.
+waitehr https://gajus.com/ --has-header "foo: bar"
+
+# Adds custom headers to the request.
+waitehr https://gajus.com/ --header "Accepts: text/html" "Authorization: Bearer fkd9afsda9k"
+`;
 
 const argv = yargs(hideBin(process.argv))
   .usage(usage)
@@ -39,6 +46,10 @@ const argv = yargs(hideBin(process.argv))
     'follow-redirect': {
       description: 'Defines if redirect responses should be followed automatically.',
       type: 'boolean',
+    },
+    'has-header': {
+      description: 'Expected header(s). If multiple headers are provided, then all of them must be contained in the response.',
+      type: 'array',
     },
     header: {
       description: 'Extra header to include in the request when sending HTTP to a server. <Header Key>: <Header Value>.',

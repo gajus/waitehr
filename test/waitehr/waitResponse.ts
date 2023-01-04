@@ -24,6 +24,32 @@ test('waits for expected response', async (t) => {
   }));
 });
 
+test('waits for expected response (has a header)', async (t) => {
+  const app = fastify();
+
+  let requestCount = 0;
+
+  const responseHandler = sinon.spy((request, reply) => {
+    if (requestCount++ === 1) {
+      void reply.header('foo', 'bar');
+    }
+
+    void reply.send('OK');
+  });
+
+  app.get('/', responseHandler);
+
+  const address = await app.listen(0);
+
+  t.true(await waitResponse(address, {
+    hasHeader: [
+      'foo: bar',
+    ],
+  }));
+
+  t.is(responseHandler.callCount, 2);
+});
+
 test('fails if unexpected status code', async (t) => {
   const app = fastify();
 

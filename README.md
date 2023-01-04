@@ -55,8 +55,13 @@ waitehr https://gajus.com/ --status-code 200 404
 # Waits for response that contains "foo" and "bar".
 waitehr https://gajus.com/ --contains "foo" "bar"
 
-# Sends headers with the request if required to receive a valid response
-waitehr https://gajus.com/ --header "Accepts: text/html" "Authorization: Bearer fkd9afsda9k"
+# Waits for response that has a specific header.
+waitehr https://gajus.com/ --has-header "foo: bar"
+
+# Adds custom headers to the request.
+waitehr https://gajus.com/ --header "Accepts: text/html" "Authorization: Bearer
+fkd9afsda9k"
+
 
 Options:
   --help               Show help                                       [boolean]
@@ -66,6 +71,9 @@ Options:
                                                                          [array]
   --follow-redirect    Defines if redirect responses should be followed
                        automatically.                                  [boolean]
+  --has-header         Expected header(s). If multiple headers are provided,
+                       then all of them must be contained in the response.
+                                                                         [array]
   --header             Extra header to include in the request when sending HTTP
                        to a server. <Header Key>: <Header Value>.        [array]
   --initial-delay      How many seconds to delay the first request.

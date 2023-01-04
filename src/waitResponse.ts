@@ -9,6 +9,7 @@ import got, {
 type ConfigurationInput = {
   contains?: string[],
   followRedirect?: boolean,
+  hasHeader?: string[],
   header?: string[],
   initialDelay?: number,
   interval?: number,
@@ -24,6 +25,7 @@ type ConfigurationInput = {
 type Configuration = {
   contains: string[],
   followRedirect: boolean,
+  hasHeader: string[],
   header: string[],
   initialDelay: number,
   interval: number,
@@ -68,8 +70,40 @@ const isExpectedResponse = (
 ): boolean => {
   const {
     contains,
+    hasHeader: hasHeaders,
     statusCodes,
   } = configuration;
+
+  for (const targetHeader of hasHeaders) {
+    const [
+      name,
+      value,
+    ] = targetHeader.split(': ');
+
+    if (!response.headers[name]) {
+      if (!quiet) {
+        console.warn(
+          conditionallyPrependTime(chalk.red('[failed check]') + ' missing required header ("%s")', configuration.prependTime),
+          name,
+        );
+      }
+
+      return false;
+    }
+
+    if (response.headers[name] !== value) {
+      if (!quiet) {
+        console.warn(
+          conditionallyPrependTime(chalk.red('[failed check]') + ' header values do not match (header: "%s", expected: "%s", actual: "%s")', configuration.prependTime),
+          name,
+          value,
+          response.headers[name],
+        );
+      }
+
+      return false;
+    }
+  }
 
   for (const needle of contains) {
     if (!response.body.includes(needle)) {
@@ -121,6 +155,7 @@ export const waitResponse = async (
   const configuration = {
     contains: [],
     followRedirect: true,
+    hasHeader: [],
     header: [],
     initialDelay: 0,
     interval: 1_000,
