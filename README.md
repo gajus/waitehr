@@ -21,11 +21,11 @@ while curl https://gajus.com/ | grep -q Gajus; do sleep 1; done
 
 However, by the time you add:
 
-- routine timeout
-- request timeout
-- follow redirects
-- max redirects
-- success threshold
+* routine timeout
+* request timeout
+* follow redirects
+* max redirects
+* success threshold
 
 It is going to be a pretty hefty script, and if everyone (with their varying experience of using Bash) were to write that script adhoc, it is likely to be error prone. It is for this reason that it makes sense to use a well tested utility that does it well.
 
@@ -33,6 +33,13 @@ It is going to be a pretty hefty script, and if everyone (with their varying exp
 
 ```bash
 npm install waitehr --global
+```
+
+## Run with Docker
+
+```bash
+docker build . -t waitehr:latest
+docker run waitehr:latest --help
 ```
 
 ## Usage
@@ -98,5 +105,5 @@ Options:
 
 ## Alternatives
 
-- [check_http](https://www.monitoring-plugins.org/doc/man/check_http.html) – Nagios plugin with equivalent functionality.
-- [httping](https://www.vanheusden.com/httping/) – utility for measuring latency and throughput of a webserver with limited some assertion capabilities.
+* [check_http](https://www.monitoring-plugins.org/doc/man/check_http.html) – Nagios plugin with equivalent functionality.
+* [httping](https://www.vanheusden.com/httping/) – utility for measuring latency and throughput of a webserver with limited some assertion capabilities.
